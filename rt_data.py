@@ -69,6 +69,7 @@ async def handle_info(req_data):
             retry_count = retry_count + 1
             print('retry_count', retry_count)
             print('error\n', repr(e))
+            answer = ''
             continue
     if not answer:
         answer = '请求接口失败，请稍后重试'
