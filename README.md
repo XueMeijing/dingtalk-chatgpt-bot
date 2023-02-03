@@ -9,8 +9,12 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 - OpenAi ChatGPT account or ChatGPT session
 
 # Usage
-1. Update config.py variables with your own info
-2. execute script
+1. install dependencies
+    ```
+    pip3 install -r requirements.txt
+    ```
+2. Update config.py variables with your own info
+3. execute script
     ```
     python3 rt_data.py
     ```
@@ -18,11 +22,11 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
     ```
     nohup python3 -u rt_data.py > nohup.out 2>&1 &
     ```
-3. watch logs
+4. watch logs
     ```
     tail -30f nohup.out
     ```
-4. If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
+5. If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
 
    E.g. 
 
