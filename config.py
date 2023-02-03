@@ -9,7 +9,7 @@
 GPT_SESSION = ''
 
 '''
-  DingTalk app_secret
+  DingTalk bot app_secret
 '''
 APP_SECRET = ''
 

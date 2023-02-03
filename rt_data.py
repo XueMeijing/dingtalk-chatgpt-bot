@@ -8,7 +8,7 @@ import base64
 import hmac
 import hashlib
 import requests
-from pyGPT import PyGPT
+from pygpt import PyGPT
 import asyncio
 from quart import Quart, request
 
@@ -20,14 +20,13 @@ app = Quart(__name__)
 async def get_data():
     # 第一步验证：是否是post请求
     if request.method == "POST":
-        print('get_data----')
         try:
             print('request.headers-----\n',request.headers)
             # 签名验证 获取headers中的Timestamp和Sign
             req_data = await request.get_json()
             timestamp = request.headers.get('Timestamp')
             sign = request.headers.get('Sign')
-            print('data----\n', req_data)
+            print('request.data-----\n', req_data)
             # 第二步验证：签名是否有效
             if check_sig(timestamp) == sign:
                 print('验证成功-----')
@@ -41,7 +40,7 @@ async def get_data():
             timestamp = '出错啦～～'
             print('error', repr(e))
         return str(timestamp)
-    return '有get请求'
+    return str(timestamp)
 
 # 处理自动回复消息
 async def handle_info(req_data):
@@ -49,7 +48,6 @@ async def handle_info(req_data):
     text_info = req_data['text']['content'].strip()
     webhook_url = req_data['sessionWebhook']
     senderid = req_data['senderId']
-    print('***************text_info：', text_info)
     # 请求GPT回复，失败重新请求三次
     retry_count = 0
     max_retry_count = 3
@@ -73,18 +71,19 @@ async def handle_info(req_data):
             continue
     if not answer:
         answer = '请求接口失败，请稍后重试'
-    title = ''
     # 调用函数，发送markdown消息
-    send_md_msg(senderid, title, answer, webhook_url)
+    send_md_msg(senderid, answer, webhook_url)
 
 # 发送markdown消息
-def send_md_msg(userid, title, message, webhook_url):
+def send_md_msg(userid, message, webhook_url):
     '''
     userid: @用户 钉钉id
     title : 消息标题
     message: 消息主体内容
     webhook_url: 通讯url
     '''
+    message = '<font color=#008000>@%s </font>  \n\n %s' % (userid, message)
+    title = '大聪明说'
     data = {
         "msgtype": "markdown",
         "markdown": {
@@ -98,9 +97,9 @@ def send_md_msg(userid, title, message, webhook_url):
         },
         '''
         "at": {
-            "atUserIds": [
-              userid
-          ],
+            "atDingtalkIds": [
+                userid
+            ],
         }
     }
     # 利用requests发送post请求
