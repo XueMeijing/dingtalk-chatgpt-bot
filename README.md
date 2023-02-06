@@ -18,7 +18,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
     ```
     python3 rt_data.py
     ```
-    or excute script in background
+    or execute script in background
     ```
     nohup python3 -u rt_data.py > nohup.out 2>&1 &
     ```
