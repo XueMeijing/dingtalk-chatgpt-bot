@@ -6,7 +6,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 `
 # Prerequisites
 - DingTalk admin role to create DingTalk bot, [how to create a DingTalk bot](https://xie.infoq.cn/article/3340770024c49b5b1a54597d5)
-- OpenAi ChatGPT account or ChatGPT session
+- ChatGPT session, [how to get ChatGPT session](https://github.com/XueMeijing/dingtalk-chatgpt-bot/blob/main/config.py)
 
 # Usage
 1. install dependencies
