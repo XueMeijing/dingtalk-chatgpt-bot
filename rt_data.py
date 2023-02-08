@@ -40,7 +40,7 @@ async def get_data():
             timestamp = '出错啦～～'
             print('error', repr(e))
         return str(timestamp)
-    return str(timestamp)
+    return str(request.headers)
 
 # 处理自动回复消息
 async def handle_info(req_data):
@@ -84,18 +84,17 @@ def send_md_msg(userid, message, webhook_url):
     '''
     message = '<font color=#008000>@%s </font>  \n\n %s' % (userid, message)
     title = '大聪明说'
+    print('message', message)
     data = {
         "msgtype": "markdown",
         "markdown": {
             "title":title,
             "text": message
         },
-        '''
-        "msgtype": "text",
-        "text": {
-            "content": message
-        },
-        '''
+        # "msgtype": "text",
+        # "text": {
+        #     "content": message
+        # },
         "at": {
             "atDingtalkIds": [
                 userid
