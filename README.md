@@ -6,7 +6,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 `
 # Prerequisites
 - DingTalk admin role to create DingTalk bot, [how to create a DingTalk bot](https://xie.infoq.cn/article/3340770024c49b5b1a54597d5)
-- ChatGPT session, [how to get ChatGPT session](https://github.com/XueMeijing/dingtalk-chatgpt-bot/blob/main/config.py)
+- OpenAi ChatGPT account or ChatGPT session
 
 # Usage
 1. install dependencies
@@ -18,7 +18,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
     ```
     python3 rt_data.py
     ```
-    or execute script in background
+    or excute script in background
     ```
     nohup python3 -u rt_data.py > nohup.out 2>&1 &
     ```
@@ -31,3 +31,8 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
    E.g. 
 
    ![demo](https://user-images.githubusercontent.com/35559153/216219243-4df07e62-090a-470d-af99-e64a0c8a36a4.png)
+
+# Update
+## 2022-02-10
+- 机器人名字叫ChatGPT会被禁止使用, 可以换成其他的
+    ![image](https://user-images.githubusercontent.com/35559153/217995508-6916bceb-188f-4bfd-b945-8841616d2ade.png)
