@@ -29,13 +29,15 @@ async def get_data():
             print('request.data-----\n', req_data)
             # 第二步验证：签名是否有效
             if check_sig(timestamp) == sign:
-                print('验证成功-----')
+                print('机器人签名验证成功-----')
                 # 获取、处理数据 
                 # req_data = json.loads(str(data, 'utf-8'))
                 # print(req_data)
                 # 调用数据处理函数
                 await handle_info(req_data)
                 return str(req_data)
+            else:
+                print('机器人签名验证失败-----')
         except Exception as e:
             timestamp = '出错啦～～'
             print('error', repr(e))
@@ -64,6 +66,7 @@ async def handle_info(req_data):
             print('--------------------------')
             break
         except Exception as e:
+            await chat_gpt.disconnect()
             retry_count = retry_count + 1
             print('retry_count', retry_count)
             print('error\n', repr(e))

@@ -9,6 +9,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 - OpenAi ChatGPT account or ChatGPT session
 
 # Usage
+## python
 1. install dependencies
     ```
     pip3 install -r requirements.txt
@@ -26,7 +27,39 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
     ```
     tail -30f nohup.out
     ```
-5. If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
+## docker
+1. get docker image and run
+    ```
+    docker run -dp 8083:8083 fengcailing/dingtalk-chatgpt-bot
+    ```
+2. show docker list and get docker container id
+    ```
+    docker ps
+    ```
+3. cd docker
+    ```
+    docker exec -it <containerId> /bin/sh
+    ```
+4. update config.py(GPT_SESSION、APP_SECRET)
+5. exit docker
+    ```
+    exit
+    ```
+6. create new iamge
+    ```
+    docker commit -m 'update config' <containerId> dingtalk-chatgpt-bot:v1
+    ```
+7. stop pre container and run new image
+    ```
+    docker stop <containerId>
+    docker run -dp 8083:8083 dingtalk-chatgpt-bot:v1
+    ```
+8. watch logs
+    ```
+    docker logs -n 30 -f <new containerId>
+    ```
+
+If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
 
    E.g. 
 
