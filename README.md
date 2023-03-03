@@ -1,12 +1,23 @@
+# Change Log
+- 2022-03-03
+    - 使用sqlite3增加上下文功能, @bot /reset 命令会重新打开新聊天窗口
+        ![image](https://user-images.githubusercontent.com/35559153/222692011-d4ac1d37-cd66-41ef-9d87-9baf423c3edd.png)
+
+- 2022-02-14
+    - 增加docker部署
+- 2022-02-10
+    - 机器人名字叫ChatGPT会被禁止使用, 可以换成其他的
+        ![image](https://user-images.githubusercontent.com/35559153/217995508-6916bceb-188f-4bfd-b945-8841616d2ade.png)
+
 # DingTalk ChatGPT Bot(Unofficial API)
 Uses API by [PawanOsman](https://github.com/PawanOsman/PyGPT)
 
 # Disclaimer
 This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see all your requests and your session token.
-`
+
 # Prerequisites
 - DingTalk admin role to create DingTalk bot, [how to create a DingTalk bot](https://xie.infoq.cn/article/3340770024c49b5b1a54597d5)
-- OpenAi ChatGPT account or ChatGPT session
+- OpenAi ChatGPT session
 
 # Usage
 ## python
@@ -15,13 +26,9 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
     pip3 install -r requirements.txt
     ```
 2. Update config.py variables with your own info
-3. execute script
+3. execute script in background
     ```
-    python3 rt_data.py
-    ```
-    or excute script in background
-    ```
-    nohup python3 -u rt_data.py > nohup.out 2>&1 &
+    nohup python3 -u index.py > nohup.out 2>&1 &
     ```
 4. watch logs
     ```
@@ -30,7 +37,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 ## docker
 1. get docker image and run
     ```
-    docker run -dp 8083:8083 fengcailing/dingtalk-chatgpt-bot
+    docker run -dp 8083:8083 fengcailing/dingtalk-chatgpt-bot:1.0.1
     ```
 2. show docker list and get docker container id
     ```
@@ -64,12 +71,3 @@ If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
    E.g. 
 
    ![demo](https://user-images.githubusercontent.com/35559153/216219243-4df07e62-090a-470d-af99-e64a0c8a36a4.png)
-
-# Update
-## 2022-03-03
-- 使用sqlite3增加上下文功能
-## 2022-02-14
-- 增加docker部署
-## 2022-02-10
-- 机器人名字叫ChatGPT会被禁止使用, 可以换成其他的
-    ![image](https://user-images.githubusercontent.com/35559153/217995508-6916bceb-188f-4bfd-b945-8841616d2ade.png)
