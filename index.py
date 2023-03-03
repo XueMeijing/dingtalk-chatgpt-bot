@@ -1,27 +1,63 @@
-'''
-rt_data.py
-Receiver Transmitter Data 数据接收和发送器
-'''
-
-# from flask import Flask, request
 import base64
 import hmac
 import hashlib
 import requests
 from pygpt import PyGPT
-import asyncio
-from quart import Quart, request
+import datetime
+from quart import Quart, request, g
+import sqlite3
 
 import config
 
 app = Quart(__name__)
+
+DATABASE = 'database.db'
+
+# 查询结果元组转字典
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+def init_db():
+    db = sqlite3.connect(DATABASE, check_same_thread=False)
+    cursor = db.cursor()
+    sqlite_create_table_query = ''' CREATE TABLE IF NOT EXISTS USER(
+                                    ID                TEXT PRIMARY KEY     NOT NULL,
+                                    NAME              TEXT                        ,
+                                    CONVERSATION_ID   TEXT                NOT NULL,
+                                    PARENT_ID         TEXT                NOT NULL,
+                                    CREATE_AT         timestamp           NOT NULL); '''
+
+    cursor.execute(sqlite_create_table_query)
+    cursor.close()
+    db.close()
+    print('数据库初始化成功')
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        init_db()
+        db = g._database = sqlite3.connect(DATABASE, check_same_thread=False)
+    # db  = sqlite3.connect(DATABASE, check_same_thread=False)
+    db.row_factory = dict_factory
+    return db
+
+def query_db(query, args=(), one=False):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute(query, args)
+    rv = cur.fetchall()
+    db.commit()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
 
 @app.route('/', methods=['GET', 'POST'])
 async def get_data():
     # 第一步验证：是否是post请求
     if request.method == "POST":
         try:
-            print('request.headers-----\n',request.headers)
             # 签名验证 获取headers中的Timestamp和Sign
             req_data = await request.get_json()
             timestamp = request.headers.get('Timestamp')
@@ -29,20 +65,25 @@ async def get_data():
             print('request.data-----\n', req_data)
             # 第二步验证：签名是否有效
             if check_sig(timestamp) == sign:
-                print('机器人签名验证成功-----')
-                # 获取、处理数据 
-                # req_data = json.loads(str(data, 'utf-8'))
-                # print(req_data)
+                print('签名验证成功-----')
                 # 调用数据处理函数
                 await handle_info(req_data)
                 return str(req_data)
             else:
-                print('机器人签名验证失败-----')
+                result = '签名验证失败-----'
+                print(result)
+                return result
         except Exception as e:
-            timestamp = '出错啦～～'
+            result = '出错啦～～'
             print('error', repr(e))
-        return str(timestamp)
-    return str(request.headers)
+        return str(result)
+    return '钉钉机器人:' + str(datetime.datetime.now())
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 # 处理自动回复消息
 async def handle_info(req_data):
@@ -50,6 +91,12 @@ async def handle_info(req_data):
     text_info = req_data['text']['content'].strip()
     webhook_url = req_data['sessionWebhook']
     senderid = req_data['senderId']
+    # 打开新聊天窗口
+    if (text_info == '/reset'):
+        sqlite_delete_data_query = """ DELETE FROM 'USER' WHERE id = ? """
+        query_db(sqlite_delete_data_query, (senderid,))
+        send_md_msg(senderid, '聊天上下文已重置', webhook_url)
+        return
     # 请求GPT回复，失败重新请求三次
     retry_count = 0
     max_retry_count = 3
@@ -59,14 +106,12 @@ async def handle_info(req_data):
             chat_gpt = PyGPT(config.GPT_SESSION)
             await chat_gpt.connect()
             await chat_gpt.wait_for_ready()
-            answer = await chat_gpt.ask(text_info)
+            answer = await chat_gpt.ask(text_info, query_db, senderid)
             print('answer:\n', answer)
             await chat_gpt.disconnect()
-            await asyncio.sleep(10)
             print('--------------------------')
             break
         except Exception as e:
-            await chat_gpt.disconnect()
             retry_count = retry_count + 1
             print('retry_count', retry_count)
             print('error\n', repr(e))
@@ -87,7 +132,7 @@ def send_md_msg(userid, message, webhook_url):
     '''
     message = '<font color=#008000>@%s </font>  \n\n %s' % (userid, message)
     title = '大聪明说'
-    print('message', message)
+
     data = {
         "msgtype": "markdown",
         "markdown": {
