@@ -66,6 +66,10 @@ If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
    ![demo](https://user-images.githubusercontent.com/35559153/216219243-4df07e62-090a-470d-af99-e64a0c8a36a4.png)
 
 # Update
+## 2022-03-03
+- 使用sqlite3增加上下文功能
+## 2022-02-14
+- 增加docker部署
 ## 2022-02-10
 - 机器人名字叫ChatGPT会被禁止使用, 可以换成其他的
     ![image](https://user-images.githubusercontent.com/35559153/217995508-6916bceb-188f-4bfd-b945-8841616d2ade.png)
