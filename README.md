@@ -42,7 +42,7 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 ## docker
 1. get docker image and run
     ```
-    docker run -dp 8083:8083 fengcailing/dingtalk-chatgpt-bot:1.0.1
+    docker run -dp 8083:8083 fengcailing/dingtalk-chatgpt-bot:1.0.2
     ```
 2. show docker list and get docker container id
     ```
