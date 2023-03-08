@@ -1,4 +1,6 @@
 # Change Log
+- 2022-03-08
+    - 优化代码，修复代理服务器偶尔connect refused的问题
 - 2022-03-03
     - 使用sqlite3增加上下文功能, @bot /reset 命令会重新打开新聊天窗口
         ![image](https://user-images.githubusercontent.com/35559153/222692011-d4ac1d37-cd66-41ef-9d87-9baf423c3edd.png)
@@ -18,6 +20,9 @@ This is not open source. [PawanOsman](https://github.com/PawanOsman/) can see al
 # Prerequisites
 - DingTalk admin role to create DingTalk bot, [how to create a DingTalk bot](https://xie.infoq.cn/article/3340770024c49b5b1a54597d5)
 - OpenAi ChatGPT session
+# Feature
+## chat conversation context
+## reset conversation
 
 # Usage
 ## python
@@ -71,3 +76,4 @@ If you @YourBotName in DingTalk group, it will get ChatGPT answer and reply.
    E.g. 
 
    ![demo](https://user-images.githubusercontent.com/35559153/216219243-4df07e62-090a-470d-af99-e64a0c8a36a4.png)
+

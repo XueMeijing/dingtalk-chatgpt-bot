@@ -1,3 +1,7 @@
+'''
+Uses API by [PawanOsman](https://github.com/PawanOsman/PyGPT)
+'''
+
 import uuid
 import asyncio
 import socketio
@@ -82,31 +86,33 @@ class PyGPT:
         if not self.auth or not self.validate_token(self.auth):
             await self.get_tokens()
         conversation = self.get_conversation_by_id(id)
-        sqlite_get_data_query = """ SELECT * FROM 'USER' WHERE id = ? """
-        user_record = query_db(sqlite_get_data_query, (id,), True)
         
+        sqlite_get_data_query = """ SELECT * FROM user WHERE id = ? """
+        user_record = query_db(sqlite_get_data_query, (id,), True)
         print('user_record', user_record)
+
         # Fix for timeout issue by Ulysses0817: https://github.com/Ulysses0817
         data = await self.socket.call(event='askQuestion', data={
             'prompt': prompt,
-            'parentId': user_record['PARENT_ID'] if user_record else str(conversation['parent_id']),
-            'conversationId': user_record["CONVERSATION_ID"] if user_record else str(conversation['conversation_id']),
+            'parentId': user_record['parent_id'] if user_record else str(conversation['parent_id']),
+            'conversationId': user_record["conversation_id"] if user_record else str(conversation['conversation_id']),
             'auth': self.auth
         }, timeout=self.timeout)
         print('ask data---\n', data)
         if 'error' in data:
             print(f'Error: {data["error"]}')
+            return f'Error: {data["error"]}'
         try:
             if user_record is None:
                 # 插入数据
-                sqlite_insert_data_query = """INSERT INTO 'USER'
-                                        ('ID', 'NAME', 'CONVERSATION_ID', 'PARENT_ID', 'CREATE_AT')
-                                        VALUES (?,?,?,?,?);"""
+                sqlite_insert_data_query = """  INSERT INTO user
+                                                ('id', 'name', 'conversation_id', 'parent_id', 'create_at')
+                                                VALUES (?,?,?,?,?);  """
                 query_db(sqlite_insert_data_query, (id, None, data['conversationId'], data['messageId'], datetime.datetime.now()))
                 print('插入数据')
             else:
                 # 更新数据
-                sqlite_update_data_query = """ UPDATE 'USER' SET ID = ?, NAME = ?, CONVERSATION_ID = ?,PARENT_ID = ?, CREATE_AT = ? WHERE id = ? """
+                sqlite_update_data_query = """ UPDATE user SET id = ?, name = ?, conversation_id = ?, parent_id = ?, create_at = ? WHERE id = ? """
                 query_db(sqlite_update_data_query, (id, None, data['conversationId'], data['messageId'], datetime.datetime.now(), id))
                 print('更新数据')
         except Exception as e:
