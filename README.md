@@ -1,3 +1,7 @@
+# ***:warning: __This repository is deprecated and no longer maintained!__***
+
+The python proxy api repo [pygpt](https://github.com/PawanOsman/PyGPT) didn't work, you can use node version [chatgpt-io](https://github.com/PawanOsman/chatgpt-io)
+
 # Change Log
 - 2022-03-08
     - 优化代码，修复代理服务器偶尔connect refused的问题
