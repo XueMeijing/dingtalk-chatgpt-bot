@@ -1,3 +1,5 @@
+# 此版本不维护了，可以使用node版本的，支持session和key两种模式[dingtalk-chatgpt-node](https://github.com/XueMeijing/dingtalk-chatgpt-node)
+
 # ***:warning: __This repository is deprecated and no longer maintained!__***
 
 The python proxy api repo [pygpt](https://github.com/PawanOsman/PyGPT) didn't work, you can use node version [chatgpt-io](https://github.com/PawanOsman/chatgpt-io)
